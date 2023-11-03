@@ -15,7 +15,7 @@ React, TailwindCSS, localforage, reactQuery
 To Run the App in developement server
 
 ```bash
-git clone https://github.com/yawai990/randomquotegen.git
+git clone https://github.com/yawai990/randomquotegenerator.git
 ```
 
 ## Installing Dependency
