@@ -1,6 +1,6 @@
 # Random Quote Generator
 
-A brief description of what this project does and who it's for
+ In this app, user can get the random quote. To get the random quote, the user should have to click the "click me to get quote card" or "next button". If the user click the "prev button". we have two situation, One is if the user do not visited before the notification will come up in the right top corner of the app. If the user visited before, the app will generate the random quote which had been seeing. And user can get the quote by key words and press enter. If Something went wrong in the site which is not user error, the site will show the error page.
 
 ## Demo
 
