@@ -1,5 +1,5 @@
-import Lottie from "lottie-react";
-import error from "../../constants/lotties/error.json";
+import Lottie from 'lottie-react';
+import error from '../../constants/lotties/error.json';
 
 const ErrorCom = () => {
   return (

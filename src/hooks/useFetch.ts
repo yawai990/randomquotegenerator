@@ -1,16 +1,37 @@
-import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import { useQuery } from "react-query";
-import { IQuotes } from "../types";
-import { toast } from "react-toastify";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
+import { useQuery } from 'react-query';
+import { IQuotes } from '../types';
+import { toast } from 'react-toastify';
+import localforage from 'localforage';
+import { APP_KEY } from '../constants/keys';
 
 export const useFetch = () => {
+  const watingTime = 1000;
   const [previousQuotes, setPreviousQuotes] = useState<IQuotes[]>([]);
   const [showQuote, setShowQuote] = useState<IQuotes>();
   const [quoteSearchLoading, setQuoteSearchLoading] = useState<boolean>(false);
-  const [clickable, setClickable] = useState<boolean>(true);
+
+  //get the previous quote from storage in
+  useEffect(() => {
+    (async () => {
+      const preQuotes = await localforage.getItem(APP_KEY);
+      if (Array.isArray(preQuotes)) {
+        setPreviousQuotes(preQuotes);
+      }
+    })();
+  }, []);
+
+  useMemo(() => {
+    //save to the localstorage
+    localforage.setItem(APP_KEY, previousQuotes);
+  }, [previousQuotes]);
 
   const getRandomQuoteFromPrevious = () => {
+    if (!previousQuotes.length) {
+      toast.error('NO PREVIOUS QUOTES');
+      return;
+    }
     const randNum = Math.floor(Math.random() * previousQuotes.length);
     setShowQuote(previousQuotes[randNum]);
   };
@@ -20,26 +41,24 @@ export const useFetch = () => {
     setQuoteSearchLoading(true);
     try {
       const data = await axios
-        .get(`https://api.adviceslip.com/advice/search/${searchKey}`)
+        .get(`${import.meta.env.VITE_QUOTE_URL}/search/${searchKey}`)
         .then((resp) => {
           // the resp will be no data or 1 or more
+          const rand = Math.floor(Math.random() * resp.data.slips.length);
           if (resp.data.total_results) {
-            const quote = resp.data.slips.slice(-1);
+            const quote = resp.data.slips[rand];
 
-            return quote[0];
-          } else {
-            toast.error("No Quote available with your key words", {
-              position: "bottom-center",
-              autoClose: 2000,
-            });
-            return null;
+            return quote;
           }
         });
       if (data !== null) {
         setShowQuote(data);
       }
     } catch (error) {
-      console.log(error);
+      toast.error('No Quote found', {
+        position: 'bottom-center',
+        autoClose: 2000,
+      });
     } finally {
       setQuoteSearchLoading(false);
     }
@@ -48,7 +67,7 @@ export const useFetch = () => {
   const fetchQuote = async () => {
     const controller = new AbortController();
     const data = await axios
-      .get("https://api.adviceslip.com/advice", {
+      .get(import.meta.env.VITE_QUOTE_URL, {
         signal: controller.signal,
       })
       .then((resp) => resp);
@@ -63,22 +82,24 @@ export const useFetch = () => {
     isError,
     isFetching,
     refetch,
-  } = useQuery(["posts"], fetchQuote, {
+  } = useQuery(['posts'], fetchQuote, {
     enabled: false,
-    staleTime: 1000,
+    staleTime: 10000,
     select: ({ data }) => {
-      const { advice, date } = data.slip;
-      return { advice, date };
+      const { advice, date, id } = data.slip;
+
+      return { advice, date, id };
     },
   });
 
-  // to prevent simutaneous click the btn
-  useEffect(() => {
-    setClickable(false);
+  //preventing continual click
+  const debouncedClick = useCallback(() => {
+    setQuoteSearchLoading(true);
     setTimeout(() => {
-      setClickable(true);
-    }, 1000);
-  }, [quote]);
+      refetch();
+      setQuoteSearchLoading(false);
+    }, watingTime);
+  }, []);
 
   useEffect(() => {
     setShowQuote(quote);
@@ -86,13 +107,10 @@ export const useFetch = () => {
 
   // if the showing quote are the same to the previous onem, it will not added to the previous quote
   useMemo(() => {
-    const quoteExist = previousQuotes.find(
-      (q) =>
-        q.advice.trim().toLowerCase() === showQuote?.advice.trim().toLowerCase()
-    );
+    const quoteExist = previousQuotes.find((q) => q.id === showQuote?.id);
 
     if (!quoteExist) {
-      if (showQuote && showQuote !== undefined) {
+      if (showQuote && showQuote.id !== undefined) {
         //   console.log(showQuote.trim().toLowerCase());
         setPreviousQuotes((prev) => [...prev, showQuote]);
       }
@@ -105,8 +123,8 @@ export const useFetch = () => {
     isLoading,
     isError,
     quoteSearchLoading,
-    clickable,
-    refetch,
+    previousQuotes,
+    debouncedClick,
     getRandomQuoteFromPrevious,
     fetchQuoteByText,
   };

@@ -1,8 +1,8 @@
-import { CTABtn, Card, SearchCom, ErrorCom, Loading } from "./components";
-import { useFetch } from "./hooks/useFetch";
-import { createPortal } from "react-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Card, HeaderNav, ErrorCom, Loading } from './components';
+import { useFetch } from './hooks/useFetch';
+import { createPortal } from 'react-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function App() {
@@ -11,11 +11,10 @@ export default function App() {
     isError,
     isLoading,
     isFetching,
-    clickable,
     quoteSearchLoading,
     fetchQuoteByText,
     getRandomQuoteFromPrevious,
-    refetch,
+    debouncedClick,
   } = useFetch();
 
   if (isError) {
@@ -23,27 +22,23 @@ export default function App() {
   }
 
   return (
-    <main className="text-center pt-10">
+    <main className="min-h-screen text-center pt-10 font-garamond bg-gray-100">
       {/* for noti */}
       <ToastContainer />
 
       {(isLoading || isLoading || isFetching || quoteSearchLoading) &&
         createPortal(<Loading />, document.body)}
 
-      <h5>RANDOM QUOTE GENERATOR</h5>
+      <h5 className="header">RANDOM QUOTE GENERATOR</h5>
 
       {/* search form */}
-      <SearchCom fetchQuoteByText={fetchQuoteByText} />
-
-      <CTABtn
-        btnLabel="prev"
-        clickDisable={clickable}
-        click={() => getRandomQuoteFromPrevious()}
+      <HeaderNav
+        fetchQuoteByText={fetchQuoteByText}
+        getRandomQuoteFromPrevious={getRandomQuoteFromPrevious}
+        debouncedClick={debouncedClick}
       />
 
-      <CTABtn btnLabel="Next" clickDisable={clickable} click={refetch} />
-
-      <Card quote={showQuote} clickDisable={clickable} getQuote={refetch} />
+      <Card quote={showQuote} getQuote={debouncedClick} />
 
       {/* for development */}
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}

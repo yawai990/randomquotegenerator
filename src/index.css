@@ -1,11 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .glass {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(206, 208, 231, 0.37);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(69, 71, 93, 0.37);
   backdrop-filter: blur(4.5px);
   -webkit-backdrop-filter: blur(4.5px);
   border-radius: 10px;
+}
+.header {
+  font-family: 'Libre Baskerville', serif;
+}
+@layer base {
+  @font-face {
+    font-family: 'garamond';
+    src: url(./fonts/EBGaramond-Bold.ttf) format('ttf');
+  }
+}
+
+.center {
+  @apply flex justify-center items-center;
 }
