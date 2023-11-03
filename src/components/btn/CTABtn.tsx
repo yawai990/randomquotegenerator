@@ -10,7 +10,7 @@ const CTABtn = ({
   return (
     <button
       onClick={click}
-      className="p-1.5 rounded-full duration-150 border bg-white text-gray-400 font-light hover:drop-shadow-md"
+      className="p-1.5 rounded-full duration-150 border bg-white text-gray-400 font-light hover:bg-blue-400 hover:text-white"
     >
       {icon}
     </button>

@@ -1,8 +1,9 @@
-import { Card, HeaderNav, ErrorCom, Loading } from './components';
+import { Card, HeaderNav, ErrorCom, Loading, ParallaxCards } from './components';
 import { useFetch } from './hooks/useFetch';
 import { createPortal } from 'react-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 // import { ReactQueryDevtools } from "react-query/devtools";
 
 export default function App() {
@@ -12,24 +13,31 @@ export default function App() {
     isLoading,
     isFetching,
     quoteSearchLoading,
+    parallaxCardQuotes,
     fetchQuoteByText,
     getRandomQuoteFromPrevious,
     debouncedClick,
   } = useFetch();
 
+
   if (isError) {
     return <ErrorCom />;
-  }
+  };
+
 
   return (
-    <main className="min-h-screen text-center pt-10 font-garamond bg-gray-100">
+    <section className='bg-primary'>
+
+    <ParallaxCards quotes={parallaxCardQuotes} />
+
+    <main className="w-screen z-10 pt-10 min-h-screen text-center font-garamond bg-primary fixed top-0">
       {/* for noti */}
       <ToastContainer />
 
       {(isLoading || isLoading || isFetching || quoteSearchLoading) &&
         createPortal(<Loading />, document.body)}
 
-      <h5 className="header">RANDOM QUOTE GENERATOR</h5>
+      <h5 className="header text-white font-semibold tracking-widest text-2xl">RANDOM QUOTE GENERATOR</h5>
 
       {/* search form */}
       <HeaderNav
@@ -43,5 +51,6 @@ export default function App() {
       {/* for development */}
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </main>
+    </section>
   );
 }

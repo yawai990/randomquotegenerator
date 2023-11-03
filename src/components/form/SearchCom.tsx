@@ -25,7 +25,7 @@ const SearchCom = ({
 
   return (
     <form onSubmit={handleSearchKey}>
-      <div className="relative border-b bg-slate-600 text-white rounded py-0.5">
+      <div className="relative border-b bg-primary-100 text-white py-0.5">
         <input
           type="text"
           name="search_text"

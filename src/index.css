@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  overflow: hidden;
+}
 .glass {
   background: rgba(0, 0, 0, 0.6);
   box-shadow: 0 8px 32px 0 rgba(69, 71, 93, 0.37);
@@ -18,6 +21,21 @@
     font-family: 'garamond';
     src: url(./fonts/EBGaramond-Bold.ttf) format('ttf');
   }
+}
+
+.scale_up{
+  animation: scaleUp 800ms linear forwards;
+}
+
+@keyframes scaleUp {
+    from{
+      transform: scale(0);
+      opacity: 0;
+    }
+    to{
+      transform: scale(1);
+      opacity: 1;
+    }
 }
 
 .center {

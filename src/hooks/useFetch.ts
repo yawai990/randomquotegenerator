@@ -11,6 +11,7 @@ export const useFetch = () => {
   const [previousQuotes, setPreviousQuotes] = useState<IQuotes[]>([]);
   const [showQuote, setShowQuote] = useState<IQuotes>();
   const [quoteSearchLoading, setQuoteSearchLoading] = useState<boolean>(false);
+  const [ parallaxCardQuotes, setParallaxCardQuotes ] = useState<IQuotes[]>([]);
 
   //get the previous quote from storage in
   useEffect(() => {
@@ -22,9 +23,15 @@ export const useFetch = () => {
     })();
   }, []);
 
+
   useMemo(() => {
     //save to the localstorage
     localforage.setItem(APP_KEY, previousQuotes);
+    if(previousQuotes.length > 4){
+      setParallaxCardQuotes(previousQuotes.slice(4,-1).slice(-4))
+    }else{
+      setParallaxCardQuotes(previousQuotes.slice(-4))
+    }
   }, [previousQuotes]);
 
   const getRandomQuoteFromPrevious = () => {
@@ -124,6 +131,7 @@ export const useFetch = () => {
     isError,
     quoteSearchLoading,
     previousQuotes,
+    parallaxCardQuotes,
     debouncedClick,
     getRandomQuoteFromPrevious,
     fetchQuoteByText,

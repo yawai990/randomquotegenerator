@@ -3,7 +3,7 @@ import loadingData from '../../constants/lotties/loading.json';
 
 const Loading = () => {
   return (
-    <div className="absolute top-0 w-screen h-screen flex justify-center items-center bg-overlay">
+    <div className="absolute z-50 top-0 w-screen h-screen flex justify-center items-center bg-overlay">
       <div className="w-fit max-w-[260px] h-[220px] bg-white drop-shadow-md rounded-md flex flex-col justify-center items-center">
         <Lottie
           width={180}
