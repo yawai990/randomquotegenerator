@@ -27,8 +27,8 @@ npm install
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
-NOTE:: .env file should be placed9 in root foldere
+To run this project, you will need to add the following environment variables to your .env file.
+NOTE:: .env file should be placed in root folder.
 
 ```bash
 VITE_QUOTE_URL=https://api.adviceslip.com/advice
