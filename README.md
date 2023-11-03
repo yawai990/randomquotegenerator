@@ -5,6 +5,7 @@ A brief description of what this project does and who it's for
 ## Demo
 
 <img src='./public/Animation.gif' width=400 height=220 alt='demo' />
+<a href="https://65451955053cee0e282af8c8--snazzy-crisp-0d8259.netlify.app/">View</a>
 
 ## Tech Stack
 
